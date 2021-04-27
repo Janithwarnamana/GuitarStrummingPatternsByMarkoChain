@@ -2,7 +2,7 @@ import pandas as pd
 
 from markovchain import MarkovChain
 
-data = pd.read_excel('ss.xls')
+data = pd.read_excel('ss2.xls')
 
 st = ['D', '&', 'v', '^', 'v^', '^v', '&^', '&v']
 n = len(st)
@@ -62,8 +62,36 @@ print(tp_matrix_df)
 # ep_matrix = emission_probability_matrix(preprocess(data))
 # ep_matrix_df = pd.DataFrame(ep_matrix)
 # print(ep_matrix_df)
-frame, path = MarkovChain.generate_markov_chain(tp_matrix, 4)
+prob, path = MarkovChain.generate_markov_chain(tp_matrix, 4)
 
-print(pd.DataFrame(frame))
+print(pd.DataFrame(prob))
 print(pd.DataFrame(path))
 
+
+def matrix_transpose_inverse(list_):
+    list_ = [[*row] for row in [*zip(*list_)]]
+    list2 = [[0 for _ in range(len(list_[0]))] for j in range(len(list_))]
+    for i, _ in enumerate(list_):
+        list2[len(list_) - i - 1] = list_[i]
+    return list2
+
+
+def backtrack(_prob, _path):
+    backtrack_path = [-1, -1, -1, -1]
+    inverse_path = matrix_transpose_inverse(path)
+    transpose_tp = matrix_transpose_inverse(prob)
+    max1 = 0
+    # find maximum likelihood path end
+    for x, val in enumerate(transpose_tp[0]):
+        if val > max1:
+            max1 = val
+            backtrack_path[3] = x
+    remaining_path_length = len(backtrack_path) - 1
+
+    # backtracking
+    for x in range(remaining_path_length):
+        backtrack_path[remaining_path_length - 1 - x] = inverse_path[x][backtrack_path[remaining_path_length - x]]
+    return backtrack_path
+
+
+print(backtrack(prob, path))
