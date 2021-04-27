@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--    <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">-->
+    <title>Guitar Strumming Patterns</title>
+    <script>
+        alert('hello')
+    </script>
+
+    <style>
+        h1,h2 {font-family: "Oswald"}
+        body{
+        background-repeat:no-repeat;
+        background-attached:fixed;
+        background-size:cover;
+        background-image:url({{url_for('static',filename='media/Evining_Guitars.jpg')}});
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+        <div class="wrapper">
+			<nav>
+				<ul>
+					<li><a class="active" href="#">Home</a></li>
+					<li><a href="#">About</a></li>
+				</ul>
+			</nav>
+			<div class="center">
+			    <h1>Strum Maker</h1>
+                <h2>Guitar Strumming Patterns For Songs</h2>
+                <div class="buttons">
+                    <button>Add A Song</button>
+                    <button class="btn2">Time Signature</button>
+                </div>
+		    </div>
+        </div>
+
+    <p>
+          My name is {{name}}
+        <div id="text" style="font-size: 40px"></div>
+
+        <script type="text/javascript">
+        setInterval(function(){
+        var txt=document.getElementById("text");
+
+        txt.innerHTML="Hello !! Everyone";
+        txt.style.color="black";
+
+        txt.style.display=(txt.style.display=='none'?'':'none');
+
+
+        },500);
+
+        </script>
+
+    </p>
+
+</body>
+
+</html>
