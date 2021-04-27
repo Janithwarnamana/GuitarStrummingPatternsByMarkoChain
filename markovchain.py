@@ -13,10 +13,10 @@ class MarkovChain:
         #   start(1)    _ 0 0 0    end
         #               _ 0 0 0
         # matrix chain initialize1:  all zeros
-        m_chain = [[0 for i in range(_strum_positions)] for j in range(len(_transition_matrix))]
+        m_chain_prob = [[0 for i in range(_strum_positions)] for j in range(len(_transition_matrix))]
         m_chain_path = [[-1 for i in range(len(_transition_matrix))] for j in range(_strum_positions)]
         # matrix chain initialize2: 1st element 1 for Down Strum
-        m_chain[0][0] = 1
+        m_chain_prob[0][0] = 1
 
         # 2d matrix transpose
         # e.g.3x3
@@ -26,20 +26,20 @@ class MarkovChain:
         #               3 3 3
         #               4 4 4
         #               end
-        m_chain = [[*row] for row in [*zip(*m_chain)]]
+        m_chain_prob = [[*row] for row in [*zip(*m_chain_prob)]]
 
-        for i, i_val in enumerate(m_chain):
+        for i, i_val in enumerate(m_chain_prob):
             for j, j_val in enumerate(i_val):
                 if i > 0:
                     max1 = 0
                     for x in range(tpm_length):
-                        temp = m_chain[i - 1][x] * _transition_matrix[x][j]
+                        temp = m_chain_prob[i - 1][x] * _transition_matrix[x][j]
                         if temp > max1:
                             max1 = temp
                             m_chain_path[i][j] = x
-                    m_chain[i][j] = max1
+                    m_chain_prob[i][j] = max1
 
-        return [[*row] for row in [*zip(*m_chain)]], [[*row] for row in [*zip(*m_chain_path)]]
+        return [[*row] for row in [*zip(*m_chain_prob)]], [[*row] for row in [*zip(*m_chain_path)]]
 
 
 # st = ['D', '&', 'v', '^', 'v^', '^v', '&^', '&v']

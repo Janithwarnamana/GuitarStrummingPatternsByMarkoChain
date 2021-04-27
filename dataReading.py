@@ -70,10 +70,10 @@ print(pd.DataFrame(path))
 
 def matrix_transpose_inverse(list_):
     list_ = [[*row] for row in [*zip(*list_)]]
-    list2 = [[0 for _ in range(len(list_[0]))] for j in range(len(list_))]
+    list_transposed = [[0 for _ in range(len(list_[0]))] for j in range(len(list_))]
     for i, _ in enumerate(list_):
-        list2[len(list_) - i - 1] = list_[i]
-    return list2
+        list_transposed[len(list_) - i - 1] = list_[i]
+    return list_transposed
 
 
 def backtrack(_prob, _path):
