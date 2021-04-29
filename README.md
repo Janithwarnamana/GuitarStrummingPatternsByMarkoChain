@@ -1,1 +1,1 @@
-# GuitarStrummingPatternsByMarkoChain
+# GuitarStrummingPatternsByMarkovChain
