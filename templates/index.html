@@ -1,66 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--    <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">-->
-    <title>Guitar Strumming Patterns</title>
-    <script>
-        alert('hello')
-    </script>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--    <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">-->
+      <title>Guitar Strumming Patterns</title>
+      <style>
+         h1,h2 {font-family: "Oswald"}
+         body{
+         background-repeat:no-repeat;
+         background-attached:fixed;
+         background-size:cover;
+         background-image:url({{url_for('static',filename='media/Evining_Guitars.jpg')}});
+         }
+         .dropbtn {
+         background-color: #04AA6D;
+         color: white;
+         padding: 10px;
+         font-size: 10px;
+         border: none;
+         }
+         .dropdown {
+         position: relative;
+         display: inline-block;
+         }
+         .dropdown-content {
+         display: none;
+         position: absolute;
+         background-color: #f1f1f1;
+         min-width: 20px;
+         box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+         z-index: 1;
+         }
+         .dropdown-content a {
+         color: black;
+         padding: 10px 10px;
+         text-decoration: none;
+         display: block;
+         }
+         .dropdown-content a:hover {background-color: #ddd;}
+         .dropdown:hover .dropdown-content {display: block;}
+         .dropdown:hover .dropbtn {background-color: #3e8e41;}
 
-    <style>
-        h1,h2 {font-family: "Oswald"}
-        body{
-        background-repeat:no-repeat;
-        background-attached:fixed;
-        background-size:cover;
-        background-image:url({{url_for('static',filename='media/Evining_Guitars.jpg')}});
+
+      </style>
+   </head>
+   <body>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <script src=""></script>
+      <div class="wrapper">
+         <nav>
+            <ul>
+               <li><a class="active" href="#">Home</a></li>
+               <li><a href="#">About</a></li>
+            </ul>
+         </nav>
+         <div class="center">
+            <h1>Strum Maker</h1>
+            <h2>Guitar Strumming Patterns For Songs</h2>
+            <div>
+               <span id="txt" style="font-size: 40px">Pattern => </span>
+               <span id="text1" style="font-size: 40px">1</span>
+               <span id="text2" style="font-size: 40px">2</span>
+               <span id="text3" style="font-size: 40px">3</span>
+               <span id="text4" style="font-size: 40px">4</span>
+            </div>
+            <h3>
+               Input Audio and Time Signature
+            </h3>
+            <button onclick="myfunc2()">Click me123</button>
+            <div class="buttons">
+               <input type="file" id="upload"/>
+               <div class="dropdown">
+                  <button class="dropbtn">Time Signature</button>
+                  <div class="dropdown-content">
+                     <a href="#">4/4</a>
+                     <a href="#">3/4</a>
+                  </div>
+               </div>
+            </div>
+            <br>
+            <div>
+               <audio id="audio" controls>
+                  <source src="" id="src"/>
+               </audio>
+            </div>
+         </div>
+      </div>
+      <!--        <input type="file" id="upload"/>-->
+      <!--        <audio id="audio" controls>-->
+      <!--            <source src="" id="src"/>-->
+      <!--        </audio>-->
+      <p>
+         The BPM category is {{name}}.
+
+      <!--<script type="text/javascript" src="script.js"></script>-->
+      <div>
+         <button onclick="typeWriter()">Strumming Patternn</button>
+      </div>
+      <form id='song_details'>
+         <label for="time_signature">Time signature:</label><br>
+         <input type="text" id="time_signature" name="time_signature" value="4/4"><br>
+         <label for="song_name">Song name:</label><br>
+         <input type="text" id="song_name" name="song_name" value="Perfect.wav"><br><br>
+         <input type="submit" value="Submit">
+      </form>
+
+      <script type="text/javascript">
+let form = document.getElementById('song_details');
+
+form.addEventListener('submit', (event) => {
+    handler(event)
+    event.preventDefault();
+});
+handler = function(event) {
+        console.log(event)
+        myfunc2(event)
+    }
+
+    function myFunction() {
+        const Http = new XMLHttpRequest();
+        const url = '/pattern';
+        Http.open("GET", url);
+        Http.send();
+
+        Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
         }
-    </style>
+    }
+
+myfunc2 = function(event) {
+    var ts = document.getElementById("time_signature").value;
+    var song = document.getElementById("song_name").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/pattern", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        "time_signature": ts,
+        "song": song
+    }));
+    xhr.onload = function() {
+        console.log("HELLO")
+        console.log(this.responseText);
+        var data = JSON.parse(this.responseText);
+        <!--1/BPM-->
+        time_gap = data[4];
+
+        func1 = function(x){
+            var txt1 = document.getElementById("text"+x.toString());
+            txt1.innerHTML = data[x-1];
+            txt1.style.color = "black";
+            txt1.style.display = (txt1.style.display == 'none' ? '' : 'none');
+            return txt1;
+         }
+
+         clear = function(){
+               txt1 = document.getElementById("text1");
+               txt2 = document.getElementById("text2");
+               txt3 = document.getElementById("text3");
+               txt4 = document.getElementById("text4");
+               txt1.style.display = 'none';
+               txt2.style.display = 'none';
+               txt3.style.display = 'none';
+               txt4.style.display = 'none';
+         }
+
+         let i = 1
+         setInterval(function(){
+         if(i>4){
+            clear();
+            i=1;
+          }
+          var txt = func1(i++);
+         }, time_gap)
+
+        console.log(data);
+    }
+}
 
 
-</head>
 
-<body>
-
-        <div class="wrapper">
-			<nav>
-				<ul>
-					<li><a class="active" href="#">Home</a></li>
-					<li><a href="#">About</a></li>
-				</ul>
-			</nav>
-			<div class="center">
-			    <h1>Strum Maker</h1>
-                <h2>Guitar Strumming Patterns For Songs</h2>
-                <div class="buttons">
-                    <button>Add A Song</button>
-                    <button class="btn2">Time Signature</button>
-                </div>
-		    </div>
-        </div>
-
-    <p>
-          My name is {{name}}
-        <div id="text" style="font-size: 40px"></div>
-
-        <script type="text/javascript">
-        setInterval(function(){
-        var txt=document.getElementById("text");
-
-        txt.innerHTML="Hello !! Everyone";
-        txt.style.color="black";
-
-        txt.style.display=(txt.style.display=='none'?'':'none');
+async function uploadFile(event) {
+    let formData = new FormData();
+    var files = event.target.files;
+    formData.append("file", files[0]);
+    await fetch('/upload', {
+        method: "POST",
+        body: formData
+    });
+    alert('The file has been uploaded successfully.');
+    console.log(files[0].name)
+}
 
 
-        },500);
+<!--blink example-->
 
-        </script>
+function handleFiles(event) {
+    var files = event.target.files;
+<!--    myfunc2(files[0])-->
+    $("#src").attr("src", URL.createObjectURL(files[0]));
+    document.getElementById("audio").load();
+}
 
-    </p>
+document.getElementById("upload").addEventListener("change", handleFiles, false);
 
-</body>
 
+      </script>
+      </p>
+   </body>
 </html>

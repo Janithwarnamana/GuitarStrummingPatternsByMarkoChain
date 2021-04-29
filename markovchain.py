@@ -1,18 +1,17 @@
-import pandas as pd
-
-
 class MarkovChain:
 
     @staticmethod
     def generate_markov_chain(_transition_matrix, _strum_positions):
 
         tpm_length = len(_transition_matrix)
+
         # 1 st Strum always a Down strum
         # e.g.3x3
         #               1 0 0 0
         #   start(1)    _ 0 0 0    end
         #               _ 0 0 0
         # matrix chain initialize1:  all zeros
+
         m_chain_prob = [[0 for i in range(_strum_positions)] for j in range(len(_transition_matrix))]
         m_chain_path = [[-1 for i in range(len(_transition_matrix))] for j in range(_strum_positions)]
         # matrix chain initialize2: 1st element 1 for Down Strum
@@ -26,6 +25,7 @@ class MarkovChain:
         #               3 3 3
         #               4 4 4
         #               end
+
         m_chain_prob = [[*row] for row in [*zip(*m_chain_prob)]]
 
         for i, i_val in enumerate(m_chain_prob):
