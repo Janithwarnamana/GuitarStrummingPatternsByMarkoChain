@@ -58,6 +58,7 @@
          <div class="center">
             <h1>Strum Maker</h1>
             <h2>Guitar Strumming Patterns For Songs</h2>
+            <h2 id="bpm_value">BPM: N/A </h2>
             <div>
                <span id="txt" style="font-size: 40px">Pattern => </span>
                <span id="text1" style="font-size: 40px">1</span>
@@ -68,16 +69,8 @@
             <h3>
                Input Audio and Time Signature
             </h3>
-            <button onclick="myfunc2()">Click me123</button>
             <div class="buttons">
                <input type="file" id="upload"/>
-               <div class="dropdown">
-                  <button class="dropbtn">Time Signature</button>
-                  <div class="dropdown-content">
-                     <a href="#">4/4</a>
-                     <a href="#">3/4</a>
-                  </div>
-               </div>
             </div>
             <br>
             <div>
@@ -85,28 +78,49 @@
                   <source src="" id="src"/>
                </audio>
             </div>
+            <button onclick="uploadFile()">Upload</button>
          </div>
       </div>
-      <!--        <input type="file" id="upload"/>-->
-      <!--        <audio id="audio" controls>-->
-      <!--            <source src="" id="src"/>-->
-      <!--        </audio>-->
-      <p>
-         The BPM category is {{name}}.
-
-      <!--<script type="text/javascript" src="script.js"></script>-->
-      <div>
-         <button onclick="typeWriter()">Strumming Patternn</button>
-      </div>
       <form id='song_details'>
-         <label for="time_signature">Time signature:</label><br>
-         <input type="text" id="time_signature" name="time_signature" value="4/4"><br>
-         <label for="song_name">Song name:</label><br>
-         <input type="text" id="song_name" name="song_name" value="Perfect.wav"><br><br>
-         <input type="submit" value="Submit">
+         <label for="song_name">Song name:</label>
+         <input type="text" id="song_name" name="song_name" value="Perfect.wav" readonly>
+         <label for="time_signature">Time signature:</label>
+         <select id="time_signature" name="time_signature">
+            <option value="4/4">4/4</option>
+            <option value="3/4">3/4</option>
+         </select>
+         <input class="dropbtn" type="submit" value="Submit">
       </form>
 
       <script type="text/javascript">
+
+<!--File Upload-->
+document.getElementById("upload").addEventListener("change", handleFiles, false);
+function handleFiles(event) {
+	var files = event.target.files;
+	$("#src").attr("src", URL.createObjectURL(files[0]));
+	document.getElementById("audio").load();
+	document.getElementById("song_name").value = files[0].name;
+}
+
+function uploadHanlder(){
+   document.getElementById("upload")
+}
+
+<!--File Upload to server-->
+async function uploadFile(event) {
+			let formData = new FormData();
+			var files = document.getElementById("upload").files;
+			formData.append("file", files[0]);
+			await fetch('/upload', {
+				method: "POST",
+				body: formData
+			}).then(data=> {
+			   console.log(data)
+			});
+			alert('The file has been uploaded successfully.');
+			console.log(files[0].name)
+
 let form = document.getElementById('song_details');
 
 form.addEventListener('submit', (event) => {
@@ -130,7 +144,8 @@ handler = function(event) {
     }
 
 myfunc2 = function(event) {
-    var ts = document.getElementById("time_signature").value;
+    var selection = document.getElementById("time_signature");
+    var ts = selection.options[selection.selectedIndex].text;
     var song = document.getElementById("song_name").value;
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/pattern", true);
@@ -140,15 +155,18 @@ myfunc2 = function(event) {
         "song": song
     }));
     xhr.onload = function() {
-        console.log("HELLO")
         console.log(this.responseText);
         var data = JSON.parse(this.responseText);
         <!--1/BPM-->
-        time_gap = data[4];
+        pattern = data.pattern;
+        time_gap = data.interval;
+        bpm = data.bpm;
+        bpm_text = document.getElementById("bpm_value");
+        bpm_text.innerHTML = "BPM: "+ bpm;
 
         func1 = function(x){
             var txt1 = document.getElementById("text"+x.toString());
-            txt1.innerHTML = data[x-1];
+            txt1.innerHTML = pattern[x-1];
             txt1.style.color = "black";
             txt1.style.display = (txt1.style.display == 'none' ? '' : 'none');
             return txt1;
@@ -180,29 +198,11 @@ myfunc2 = function(event) {
 
 
 
-async function uploadFile(event) {
-    let formData = new FormData();
-    var files = event.target.files;
-    formData.append("file", files[0]);
-    await fetch('/upload', {
-        method: "POST",
-        body: formData
-    });
-    alert('The file has been uploaded successfully.');
-    console.log(files[0].name)
+
 }
 
 
-<!--blink example-->
 
-function handleFiles(event) {
-    var files = event.target.files;
-<!--    myfunc2(files[0])-->
-    $("#src").attr("src", URL.createObjectURL(files[0]));
-    document.getElementById("audio").load();
-}
-
-document.getElementById("upload").addEventListener("change", handleFiles, false);
 
 
       </script>

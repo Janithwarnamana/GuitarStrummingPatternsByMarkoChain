@@ -17,19 +17,19 @@ class BpmClassifier:
         if ts_input == "3/4":
             if bpm_input in range(bpm_start, bpm_start + step_size * 1):
                 bpm_range = "First Set"
-                pattern = [0, 1, 2, 2]
+                pattern = [0, 1, 0]
                 # print(bpm_range)
             elif bpm_input in range(bpm_start + step_size * 1, bpm_start + step_size * 2):
                 bpm_range = "Second Set"
-                pattern = [0, 1, 2, 2]
+                pattern = [0, 1, 0]
                 # print(bpm_range)
             elif bpm_input in range(bpm_start + step_size * 2, bpm_start + step_size * 3):
                 bpm_range = "Third Set"
-                pattern = [0, 1, 2, 2]
+                pattern = [0, 1, 2]
                 # print(bpm_range)
             elif bpm_input in range(bpm_start + step_size * 3, bpm_start + step_size * 4):
                 bpm_range = "Fourth Set"
-                pattern = [0, 1, 2, 2]
+                pattern = [0, 1, 4]
                 # print(bpm_range)
             else:
                 bpm_range = "Out Of The Scope"

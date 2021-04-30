@@ -23,8 +23,8 @@ def app_route():
 def generate_patter():
     if request.method == 'POST':
         json_request = request.get_json()
-        pattern = StrumPatternGenerator.generate_pattern(json_request['song'], json_request['time_signature'])
-        return json.dumps(pattern)
+        json_resp = StrumPatternGenerator.generate_pattern(json_request['song'], json_request['time_signature'])
+        return json_resp.toJSON()
     return "Unsupported Request"
 
 
