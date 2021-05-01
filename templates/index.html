@@ -129,7 +129,7 @@ form.addEventListener('submit', (event) => {
 });
 handler = function(event) {
         console.log(event)
-        myfunc2(event)
+        startStrumming(event)
     }
 
     function myFunction() {
@@ -143,7 +143,7 @@ handler = function(event) {
         }
     }
 
-myfunc2 = function(event) {
+startStrumming = function(event) {
     var selection = document.getElementById("time_signature");
     var ts = selection.options[selection.selectedIndex].text;
     var song = document.getElementById("song_name").value;
@@ -163,6 +163,9 @@ myfunc2 = function(event) {
         bpm = data.bpm;
         bpm_text = document.getElementById("bpm_value");
         bpm_text.innerHTML = "BPM: "+ bpm;
+
+         var audio = document.getElementById("audio");
+         audio.play()
 
         func1 = function(x){
             var txt1 = document.getElementById("text"+x.toString());
@@ -194,17 +197,8 @@ myfunc2 = function(event) {
 
         console.log(data);
     }
+   }
 }
-
-
-
-
-}
-
-
-
-
-
       </script>
       </p>
    </body>
