@@ -1,11 +1,8 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, request
 
-from bpm_classification import BpmClassifier
 from strum_pattern_generator import StrumPatternGenerator
 import os
-import uuid
 import json
-import data_preprocessor
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
